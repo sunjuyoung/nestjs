@@ -1,42 +1,40 @@
-import { PostDto } from "./blog.model";
+import { PostDto } from './blog.model';
+import { Injectable } from '@nestjs/common';
+import { BlogRepositoryImpl } from './blog.repository';
 
+@Injectable()
+export class BlogService {
+  constructor(private blogRepository: BlogRepositoryImpl) {}
 
+  posts = [];
 
-export class BlogService{
-    posts = [];
+  getAllPosts() {
+    return this.posts;
+  }
 
-    getAllPosts(){
-        return this.posts;
-    }
+  createPost(postDto: PostDto) {
+    const id = this.posts.length + 1;
+    this.posts.push({ id: id.toString(), ...postDto, createdAt: new Date() });
+  }
 
-    createPost(postDto: PostDto){
-        const id = this.posts.length + 1;
-        this.posts.push({ id: id.toString(), ...postDto, createdAt: new Date() });
-    }
+  getPostById(id: string) {
+    const post = this.posts.find((post) => post.id === id);
 
-    getPostById(id: string){
-        const post = this.posts.find((post) => post.id === id);
+    console.log(id);
+    console.log(post);
+    return post;
+  }
 
-        console.log(id)
-        console.log(post)
-        return post;
-    }
+  deletePostById(id: string) {
+    const filterPost = this.posts.filter((post) => post.id !== id);
+    this.posts = [...filterPost];
+  }
 
-    deletePostById(id: string){
-        const filterPost = this.posts.filter((post) => post.id !== id);
-        this.posts = [...filterPost];
+  updatePostById(id: string, postDto: PostDto) {
+    let updateIndex = this.posts.findIndex((post) => post.id === id);
+    const updatePost = { id, ...postDto, updatedAt: new Date() };
+    this.posts[updateIndex] = updatePost;
 
-    }
-
-    updatePostById(id: string, postDto: PostDto){
-        let updateIndex = this.posts.findIndex((post) => post.id === id);
-        const updatePost = {id, ...postDto, updatedAt: new Date()};
-        this.posts[updateIndex] = updatePost;
-
-        return updatePost;
-
-    }
-
-
+    return updatePost;
+  }
 }
-
