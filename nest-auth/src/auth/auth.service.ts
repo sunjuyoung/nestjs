@@ -31,4 +31,25 @@ export class AuthService {
       );
     }
   }
+
+  async validateUser(email: string, password: string) {
+    const user = await this.userService.getUserByEmail(email);
+    if (!user) {
+      throw new HttpException(
+        '해당 유저가 존재하지 않습니다.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      throw new HttpException(
+        '비밀번호가 일치하지 않습니다.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    user.password = undefined;
+    return user;
+  }
 }
