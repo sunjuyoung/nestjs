@@ -8,5 +8,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   imports: [TypeOrmModule.forFeature([User])],
   controllers: [UserController],
   providers: [UserService],
+  exports: [UserService], //외부 모듈에서 사용가능하도록 설정
 })
 export class UserModule {}
