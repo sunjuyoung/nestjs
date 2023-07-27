@@ -26,7 +26,7 @@ export class UserService {
     return result;
   }
 
-  async updateUser(email: string, user: User) {
+  async updateUser(email: string, user) {
     const findUser: User = await this.getUserByEmail(email);
     findUser.username = user.username;
     findUser.password = user.password;
